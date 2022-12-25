@@ -7,8 +7,8 @@ terraform {
 }
 
 provider "kubernetes" {
-    config_path = "~/.kube/config"
-    config_context = "docker-desktop"
+  config_path = "~/.kube/config"
+  config_context = "docker-desktop"
 }
 
 resource "kubernetes_namespace_v1" "diplomovka" {
@@ -17,209 +17,161 @@ resource "kubernetes_namespace_v1" "diplomovka" {
   }
 }
 
-resource "kubernetes_deployment_v1" "nginx-deployment" {
+resource "kubernetes_persistent_volume_v1" "minio-pv" {
   metadata {
-    name = "nginx"
+    name = "minio-pv"
+  }
+
+  spec {
+    capacity = {
+      storage = "2Gi"
+    }
+    access_modes = ["ReadWriteOnce"]
+    storage_class_name = "manual"
+
+    persistent_volume_source {
+      host_path {
+        path = "/mnt/minio"
+      }
+    }
+  }
+
+  depends_on = [
+    kubernetes_namespace_v1.diplomovka
+  ]
+}
+
+# status: Pending persistent volume clain is unable to claim persistent volume
+resource "kubernetes_persistent_volume_claim_v1" "minio-pvc" {
+  metadata {
+    name = "minio-pvc"
+    labels = {
+      "app" = "minio-pvc"
+    }
     namespace = kubernetes_namespace_v1.diplomovka.metadata.0.name
   }
 
   spec {
-    replicas = 2
+    access_modes = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "1Gi"
+      }
+    }
+    volume_name = "minio-pvc"
+    storage_class_name = "manual"
+  }
+
+  depends_on = [
+    kubernetes_persistent_volume_v1.minio-pv
+  ]
+}
+
+
+resource "kubernetes_deployment_v1" "minio-deployment" {
+  metadata {
+    name = "minio"
+    namespace = kubernetes_namespace_v1.diplomovka.metadata.0.name
+  }
+  spec {
+    replicas = 1
     selector {
       match_labels = {
-        app = "nginx"
+        app = "minio"
       }
     }
     template {
       metadata {
         labels = {
-          app = "nginx"
+          app = "minio"
         }
       }
       spec {
         container {
-          image = "nginx"
-          name = "nginx-container"
+          image = "minio/minio:latest"
+          name = "minio"
           port {
-            container_port = 80
+            container_port = 9000
+          }
+          port {
+            container_port = 9001
+          }
+
+          env {
+            name = "MINIO_ROOT_USER"
+            value = "root"
+          }
+          env {
+            name = "MINIO_ROOT_PASSWORD"
+            value = "password"
+          }
+          args = ["server", "/data"]
+          readiness_probe {
+            http_get {
+              path = "/minio/health/ready"
+              port = 9000
+            }
+            initial_delay_seconds = 10
+            period_seconds = 20
+          }
+
+          liveness_probe {
+            http_get {
+              path = "/minio/health/live"
+              port = 9000
+            }
+            initial_delay_seconds = 10
+            period_seconds = 20
+          }
+          volume_mount {
+            name = "minio-pv"
+            mount_path = "/data"
+          }
+        }
+
+        volume {
+          name = "minio-pv"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim_v1.minio-pvc.metadata.0.name
           }
         }
       }
     }
   }
+  depends_on = [
+    kubernetes_persistent_volume_claim_v1.minio-pvc
+  ]
 }
 
-resource "kubernetes_service_v1" "nginx-service" {
+resource "kubernetes_service" "minio-service" {
   metadata {
-    name = "nginx"
+    name = "minio"
     namespace = kubernetes_namespace_v1.diplomovka.metadata.0.name
+    labels = {
+      app = "minio"
+    }
   }
   spec {
     selector = {
-      "app" = kubernetes_deployment_v1.nginx-deployment.metadata.0.name
+      app = kubernetes_deployment_v1.minio-deployment.metadata.0.name
+    }
+    # only minio-api working
+    port {
+      name = "minio-api"
+      port = 9000
+      target_port = 9000
+      node_port = 30201
+    }
+    port {
+      name = "minio-gui"
+      port = 9001
+      target_port = 9001
+      node_port = 30202
     }
     type = "NodePort"
-    port {
-      name = "http"
-      node_port = 30201
-      port = 80
-      target_port = 80
-    }
   }
+
+  depends_on = [
+    kubernetes_deployment_v1.minio-deployment
+  ]
 }
-
-
-# resource "kubernetes_persistent_volume" "minio-pv" {
-#   metadata {
-#     name = "minio-pv"
-#   }
-
-#   spec {
-#     capacity = {
-#       "storage" = "2Gi"
-#     }
-#     access_modes = ["ReadWriteOnce"]
-#     persistent_volume_reclaim_policy = "Retain"
-
-#     storage_class_name = "standard"
-
-#     persistent_volume_source {
-#       host_path {
-#         path = "/mnt/minio"
-#       } 
-#     }
-#   }
-
-#   depends_on = [
-#     kubernetes_namespace.diplomovka
-#   ]
-# }
-
-
-# resource "kubernetes_persistent_volume_claim" "minio-pvc" {
-#   metadata {
-#     name = "minio-pvc"
-#     labels = {
-#       "app" = "minio-pvc"
-#     }
-#     namespace = "diplomovka"
-#   }
-
-#   spec {
-#     access_modes = ["ReadWriteOnce"]
-#     resources {
-#       requests = {
-#         storage = "1Gi"
-#       }
-#     }
-#     volume_name = "minio-pvc"
-#     storage_class_name = "standard"
-#   }
-
-#   depends_on = [
-#     kubernetes_persistent_volume.minio-pv
-#   ]
-# }
-
-# resource "kubernetes_pod" "minio-pod" {
-#   metadata {
-#     name = "minio"
-#     namespace = "diplomovka"
-#     labels = {
-#         app = "minio"
-#     }
-#   }
-
-#   spec {
-#     container {
-#       image = "minio/minio:latest"
-#       name = "minio"
-
-#       # env {
-#       #   name = "MINIO_ROOT_USER"
-#       #   value = "root"
-#       # }
-
-#       # env {
-#       #   name = "MINIO_ROOT_PASSWORD"
-#       #   value = "password"
-#       # }
-
-#       env {
-#         name  = "MINIO_ACCESS_KEY"
-#         value = "myaccesskey"
-#       }
-
-#       env {
-#         name  = "MINIO_SECRET_KEY"
-#         value = "mysecretkey"
-#       }
-
-#       port {
-#         container_port = 9000
-#       }
-
-#       port {
-#         container_port = 9001
-#       }
-
-#       # readiness_probe {
-#       #   http_get {
-#       #     path = "minio/health/ready"
-#       #     port = 9000
-#       #   }
-#       #   initial_delay_seconds = 30
-#       #   period_seconds = 15
-#       #   timeout_seconds = 10
-#       #   success_threshold = 1
-#       #   failure_threshold = 3
-#       # }
-
-#       volume_mount {
-#         name = "minio-pv"
-#         mount_path = "/data"
-#       }
-#     }
-
-#     volume {
-#       name = "minio-pv"
-#       persistent_volume_claim {
-#         claim_name = kubernetes_persistent_volume_claim.minio-pvc.metadata.0.name
-#       }
-#     }
-#   }
-
-#   depends_on = [
-#     kubernetes_persistent_volume_claim.minio-pvc
-#   ]
-# }
-
-# resource "kubernetes_service" "minio-service" {
-#   metadata {
-#     name = "minio"
-#     namespace = "diplomovka"
-#     labels = {
-#       app = "minio"
-#     }
-#   }
-#   spec {
-#     selector = {
-#       "app" = "kubernetes_pod.minio-pod.metadata.0.labels.app"
-#     }
-#     port {
-#       name = "minio-api"
-#       port = 9000
-#       target_port = 9000
-#     }
-#     port {
-#       name = "minio-gui"
-#       port = 9001
-#       target_port = 9001
-#     }
-#     type = "NodePort"
-#   }
-
-#   depends_on = [
-#     kubernetes_pod.minio-pod
-#   ]
-# }
