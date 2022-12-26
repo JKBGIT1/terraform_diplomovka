@@ -26,12 +26,12 @@ resource "kubernetes_persistent_volume_v1" "minio-pv" {
     capacity = {
       storage = "2Gi"
     }
-    access_modes = ["ReadWriteOnce"]
-    storage_class_name = "manual"
+    access_modes = ["ReadWriteMany"]
+    storage_class_name = "hostpath"
 
     persistent_volume_source {
       host_path {
-        path = "/mnt/minio"
+        path = "/mnt/data"
       }
     }
   }
@@ -46,20 +46,20 @@ resource "kubernetes_persistent_volume_claim_v1" "minio-pvc" {
   metadata {
     name = "minio-pvc"
     labels = {
-      "app" = "minio-pvc"
+      app = "minio-pvc"
     }
     namespace = kubernetes_namespace_v1.diplomovka.metadata.0.name
   }
 
   spec {
-    access_modes = ["ReadWriteOnce"]
+    access_modes = ["ReadWriteMany"]
     resources {
       requests = {
         storage = "1Gi"
       }
     }
-    volume_name = "minio-pvc"
-    storage_class_name = "manual"
+    volume_name = kubernetes_persistent_volume_v1.minio-pv.metadata.0.name
+    storage_class_name = "hostpath"
   }
 
   depends_on = [
