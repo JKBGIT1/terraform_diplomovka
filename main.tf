@@ -17,6 +17,15 @@ resource "kubernetes_namespace_v1" "diplomovka" {
   }
 }
 
+# resource "kubernetes_ingress_class_v1" "minio-ingress-class" {
+#   metadata {
+#     name = "minio-ingress-class"
+#   }
+#   parameters {
+#     controller = "nginx"
+#   }
+# }
+
 resource "kubernetes_persistent_volume_v1" "minio-pv" {
   metadata {
     name = "minio-pv"
@@ -41,7 +50,6 @@ resource "kubernetes_persistent_volume_v1" "minio-pv" {
   ]
 }
 
-# status: Pending persistent volume clain is unable to claim persistent volume
 resource "kubernetes_persistent_volume_claim_v1" "minio-pvc" {
   metadata {
     name = "minio-pvc"
@@ -105,7 +113,7 @@ resource "kubernetes_deployment_v1" "minio-deployment" {
             name = "MINIO_ROOT_PASSWORD"
             value = "password"
           }
-          args = ["server", "/data"]
+          args = ["server", "/data", "--console-address", ":9001"]
           readiness_probe {
             http_get {
               path = "/minio/health/ready"
@@ -143,12 +151,12 @@ resource "kubernetes_deployment_v1" "minio-deployment" {
   ]
 }
 
-resource "kubernetes_service" "minio-service" {
+resource "kubernetes_service_v1" "minio-service-api" {
   metadata {
-    name = "minio"
+    name = "minio-api"
     namespace = kubernetes_namespace_v1.diplomovka.metadata.0.name
     labels = {
-      app = "minio"
+      app = "minio-api"
     }
   }
   spec {
@@ -160,18 +168,63 @@ resource "kubernetes_service" "minio-service" {
       name = "minio-api"
       port = 9000
       target_port = 9000
-      node_port = 30201
+    }
+    type = "ClusterIP"
+  }
+  depends_on = [
+    kubernetes_deployment_v1.minio-deployment
+  ]
+}
+
+resource "kubernetes_service_v1" "minio-service-gui" {
+  metadata {
+    name = "minio-gui"
+    namespace = kubernetes_namespace_v1.diplomovka.metadata.0.name
+    labels = {
+      "app" = "minio-gui"
+    }
+  }
+  spec {
+    selector = {
+      app = kubernetes_deployment_v1.minio-deployment.metadata.0.name
     }
     port {
       name = "minio-gui"
       port = 9001
       target_port = 9001
-      node_port = 30202
     }
     type = "NodePort"
   }
-
   depends_on = [
     kubernetes_deployment_v1.minio-deployment
+  ]
+}
+
+resource "kubernetes_ingress_v1" "minio-ingress" {
+  metadata {
+    name = "minio-ingress"
+    namespace = kubernetes_namespace_v1.diplomovka.metadata.0.name
+  }
+  spec {
+    # ingress_class_name = kubernetes_ingress_class_v1.minio-ingress-class.metadata.0.name
+    rule {
+      host = "localhost"
+      http {
+        path {
+          path = "/*"
+          backend {
+            service {
+              name = kubernetes_service_v1.minio-service-gui.metadata.0.name
+              port {
+                number = 9001
+              } 
+            }
+          }
+        }
+      }
+    }
+  }
+  depends_on = [
+    kubernetes_service_v1.minio-service-gui
   ]
 }
