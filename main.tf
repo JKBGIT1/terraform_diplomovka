@@ -38,6 +38,7 @@ module "my_persistent_volume_claims" {
   diplomovka_namespace_name = module.my_namespaces.namespace_name
   minio_pv_name = module.my_persistent_volumes.minio_pv_name
   redis_pv_name = module.my_persistent_volumes.redis_pv_name
+  postgres_pv_name = module.my_persistent_volumes.postgres_pv_name
 
   depends_on = [
     module.my_persistent_volumes
@@ -55,6 +56,10 @@ module "my_deployments" {
 
   redis_pv_name = module.my_persistent_volumes.redis_pv_name
   redis_pvc_name = module.my_persistent_volume_claims.redis_pvc_name
+
+  postgres_pv_name = module.my_persistent_volumes.postgres_pv_name
+  postgres_pvc_name = module.my_persistent_volume_claims.postgres_pvc_name
+  postgres_secret_name = module.my_secrets.postgres_secret_name
 
   depends_on = [
     module.my_persistent_volume_claims,

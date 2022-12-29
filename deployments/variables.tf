@@ -92,3 +92,48 @@ variable "redis_pvc_name" {
   type = string
   default = "redis-pvc"
 }
+
+variable "postgres_deployment_name" {
+  type = string
+  default = "postgres"
+}
+
+variable "total_postgres_replicas" {
+  type = string
+  default = 1
+}
+
+variable "postgres_pods_name" {
+  type = string
+  default = "postgres"
+}
+
+variable "postgres_image" {
+  type = string
+  default = "postgres:15rc1-alpine3.16"
+}
+
+variable "postgres_container_name" {
+  type = string
+  default = "postgres"
+}
+
+variable "postgres_port" {
+  type = number
+  default = 5432
+}
+
+variable "postgres_pv_name" {
+  type = string
+  default = "postgres-pv"
+}
+
+variable "postgres_pvc_name" {
+  type = string
+  default = "postgres-pvc"
+}
+
+variable "postgres_secret_name" {
+  type = string
+  default = "postgres-secret"
+}
