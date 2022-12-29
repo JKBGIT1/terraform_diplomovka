@@ -1,18 +1,18 @@
 resource "kubernetes_persistent_volume_v1" "minio_pv" {
   metadata {
-    name = "minio-pv"
+    name = var.minio_pv_name
   }
 
   spec {
     capacity = {
-      storage = "2Gi"
+      storage = var.minio_pv_storage
     }
-    access_modes = ["ReadWriteOnce"]
-    storage_class_name = "hostpath"
+    access_modes = var.minio_pv_access_modes
+    storage_class_name = var.minio_pv_storage_class_name
 
     persistent_volume_source {
       host_path {
-        path = "/mnt/minio"
+        path = var.minio_pv_path
       }
     }
   }

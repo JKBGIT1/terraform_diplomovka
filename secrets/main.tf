@@ -3,10 +3,6 @@ variable "diplomovka_namespace_name" {
   default = "diplomovka"
 }
 
-# data "local_sensitive_file" "minio_env" {
-#   filename = "minio_cerdentials.env"
-# }
-
 resource "kubernetes_secret_v1" "minio_secrets" {
   metadata {
     name = "minio-secrets"
