@@ -3,9 +3,14 @@ variable "diplomovka_namespace_name" {
   default = "diplomovka"
 }
 
-variable "persistent_volume_claim_name" {
+variable "minio_pvc_name" {
   type = string
   default = "minio-pvc"
+}
+
+variable "minio_pv_name" {
+  type = string
+  default = "minio-pv"
 }
 
 variable "minio_secret_name" {
@@ -13,7 +18,17 @@ variable "minio_secret_name" {
   default = "minio-secret"
 }
 
-resource "kubernetes_deployment_v1" "minio-deployment" {
+variable "redis_pv_name" {
+  type = string
+  default = "redis-pv"
+}
+
+variable "redis_pvc_name" {
+  type = string
+  default = "redis-pvc"
+}
+
+resource "kubernetes_deployment_v1" "minio_deployment" {
   metadata {
     name = "minio"
     namespace = var.diplomovka_namespace_name
@@ -65,15 +80,15 @@ resource "kubernetes_deployment_v1" "minio-deployment" {
             period_seconds = 20
           }
           volume_mount {
-            name = "minio-pv"
+            name = var.minio_pv_name
             mount_path = "/data"
           }
         }
 
         volume {
-          name = "minio-pv"
+          name = var.minio_pv_name
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = var.minio_pvc_name
           }
         }
       }
@@ -81,6 +96,52 @@ resource "kubernetes_deployment_v1" "minio-deployment" {
   }
 }
 
-output "pods_name" {
-  value = kubernetes_deployment_v1.minio-deployment.metadata.0.name
+resource "kubernetes_deployment_v1" "redis_deployment" {
+  metadata {
+    name = "redis"
+    namespace = var.diplomovka_namespace_name
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "redis"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "redis"
+        }
+      }
+      spec {
+        container {
+          image = "redis:alpine3.16"
+          name = "redis"
+          port {
+            container_port = 6379
+          }
+          volume_mount {
+            name = var.redis_pv_name
+            mount_path = "/data"
+          }
+        }
+
+        volume {
+          name = var.redis_pv_name
+          persistent_volume_claim {
+            claim_name = var.redis_pvc_name
+          }
+        }
+      }
+    }
+  }
+}
+
+output "minio_pods_name" {
+  value = kubernetes_deployment_v1.minio_deployment.metadata.0.name
+}
+
+output "redis_pods_name" {
+  value = kubernetes_deployment_v1.redis_deployment.metadata.0.name
 }
