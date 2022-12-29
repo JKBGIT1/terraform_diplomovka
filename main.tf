@@ -33,7 +33,7 @@ module "my_persistent_volumes" {
 module "my_persistent_volume_claims" {
   source = "./persistent_volume_claims"
   diplomovka_namespace_name = module.my_namespaces.namespace_name
-  persistent_volume_name = module.my_persistent_volumes.persistent_volume_name
+  minio_pv_name = module.my_persistent_volumes.minio_pv_name
   depends_on = [
     module.my_persistent_volumes
   ]
@@ -42,7 +42,7 @@ module "my_persistent_volume_claims" {
 module "my_deployments" {
   source = "./deployments"
   diplomovka_namespace_name = module.my_namespaces.namespace_name
-  persistent_volume_claim_name = module.my_persistent_volume_claims.persistent_volume_claim_name
+  persistent_volume_claim_name = module.my_persistent_volume_claims.minio_pvc_name
   minio_secret_name = module.my_secrets.minio_secret_name
   depends_on = [
     module.my_persistent_volume_claims,
