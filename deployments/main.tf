@@ -8,6 +8,11 @@ variable "persistent_volume_claim_name" {
   default = "minio-pvc"
 }
 
+variable "minio_secret_name" {
+  type = string
+  default = "minio-secret"
+}
+
 resource "kubernetes_deployment_v1" "minio-deployment" {
   metadata {
     name = "minio"
@@ -36,14 +41,10 @@ resource "kubernetes_deployment_v1" "minio-deployment" {
           port {
             container_port = 9001
           }
-
-          env {
-            name = "MINIO_ROOT_USER"
-            value = "root"
-          }
-          env {
-            name = "MINIO_ROOT_PASSWORD"
-            value = "password"
+          env_from {
+            secret_ref {
+              name = var.minio_secret_name
+            }
           }
           args = ["server", "/data", "--console-address", ":9001"]
           readiness_probe {

@@ -15,6 +15,14 @@ module "my_namespaces" {
   source = "./namespaces"
 }
 
+module "my_secrets" {
+  source = "./secrets"
+  diplomovka_namespace_name = module.my_namespaces.namespace_name
+  depends_on = [
+    module.my_namespaces
+  ]
+}
+
 module "my_persistent_volumes" {
   source = "./persistent_volumes"
   depends_on = [
@@ -35,8 +43,10 @@ module "my_deployments" {
   source = "./deployments"
   diplomovka_namespace_name = module.my_namespaces.namespace_name
   persistent_volume_claim_name = module.my_persistent_volume_claims.persistent_volume_claim_name
+  minio_secret_name = module.my_secrets.minio_secret_name
   depends_on = [
-    module.my_persistent_volume_claims
+    module.my_persistent_volume_claims,
+    module.my_secrets
   ]
 }
 
