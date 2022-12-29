@@ -52,3 +52,28 @@ variable "redis_storage_class_name" {
   type = string
   default = "hostpath"
 }
+
+variable "postgres_pv_name" {
+  type = string
+  default = "postgres-pv"
+}
+
+variable "postgres_pvc_name" {
+  type = string
+  default = "postgres-pvc"
+}
+
+variable "postgres_access_modes" {
+  type = list(string)
+  default = ["ReadWriteOnce"]
+}
+
+variable "postgres_pvc_storage" {
+  type = string
+  default = "1Gi"
+}
+
+variable "postgres_storage_class_name" {
+  type = string
+  default = "hostpath"
+}

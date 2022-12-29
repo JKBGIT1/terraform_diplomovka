@@ -40,10 +40,35 @@ resource "kubernetes_persistent_volume_claim_v1" "redis_pvc" {
   }
 }
 
+resource "kubernetes_persistent_volume_claim_v1" "postgres_pvc" {
+  metadata {
+    name = var.postgres_pvc_name
+    labels = {
+      app = var.postgres_pvc_name
+    }
+    namespace = var.diplomovka_namespace_name
+  }
+
+  spec {
+    access_modes = var.postgres_access_modes
+    resources {
+      requests = {
+        storage = var.postgres_pvc_storage
+      }
+    }
+    volume_name = var.postgres_pv_name
+    storage_class_name = var.postgres_storage_class_name
+  }
+}
+
 output "minio_pvc_name" {
   value = kubernetes_persistent_volume_claim_v1.minio_pvc.metadata.0.name
 }
 
 output "redis_pvc_name" {
   value = kubernetes_persistent_volume_claim_v1.redis_pvc.metadata.0.name
+}
+
+output "postgres_pvc_name" {
+  value = kubernetes_persistent_volume_claim_v1.postgres_pvc.metadata.0.name
 }
