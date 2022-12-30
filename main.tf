@@ -85,7 +85,10 @@ module "my_services" {
   source = "./services"
 
   diplomovka_namespace_name = module.my_namespaces.namespace_name
-  pods_name = module.my_deployments.minio_pods_name
+  minio_pods_name = module.my_deployments.minio_pods_name
+
+  zookeeper_pods_name = module.my_deployments.zookeeper_pods_name
+  zookeeper_port = module.my_config_maps.zookeeper_port
 
   depends_on = [
     module.my_deployments
@@ -96,7 +99,7 @@ module "my_ingress" {
   source = "./ingress"
 
   diplomovka_namespace_name = module.my_namespaces.namespace_name
-  service_name = module.my_services.service_name
+  minio_gui_service_name = module.my_services.minio_gui_service_name
 
   depends_on = [
     module.my_services

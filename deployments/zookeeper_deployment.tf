@@ -43,3 +43,7 @@ resource "kubernetes_deployment_v1" "zookeeper_deployment" {
     }
   }
 }
+
+output "zookeeper_pods_name" {
+  value = kubernetes_deployment_v1.zookeeper_deployment.metadata.0.name
+}

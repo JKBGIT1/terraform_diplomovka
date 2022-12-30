@@ -3,7 +3,7 @@ variable "diplomovka_namespace_name" {
   default = "diplomovka"
 }
 
-variable "service_name" {
+variable "minio_gui_service_name" {
   type = string
   default = "minio-gui"
 }
@@ -22,7 +22,7 @@ resource "kubernetes_ingress_v1" "minio-ingress" {
           path = "/"
           backend {
             service {
-              name = var.service_name
+              name = var.minio_gui_service_name
               port {
                 number = 9001
               } 
