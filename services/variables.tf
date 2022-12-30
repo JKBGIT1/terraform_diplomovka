@@ -35,10 +35,25 @@ variable "zookeeper_pods_name" {
 
 variable "zookeeper_service_name" {
   type = string
-  default = "minio-api"
+  default = "zookeeper"
 }
 
 variable "zookeeper_port" {
   type = number
   default = 2181
+}
+
+variable "broker_service_name" {
+  type = string
+  default = "broker"
+}
+
+variable "broker_pods_name" {
+  type = string
+  default = "broker"
+}
+
+variable "broker_port" {
+  type = number
+  default = 29092
 }

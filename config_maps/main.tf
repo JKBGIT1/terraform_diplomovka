@@ -14,10 +14,25 @@ resource "kubernetes_config_map_v1" "zookeeper_config_map" {
   }
 }
 
+resource "kubernetes_config_map_v1" "broker_config_map" {
+  metadata {
+    name = "broker-config-map"
+    namespace = var.diplomovka_namespace_name
+  }
+  data = {
+    for line in compact(split("\r\n", trimspace(file("./config_maps/kafka_broker.env")))):
+      split("=",line)[0] => split("=",line)[1]
+  }
+}
+
 output "zookeeper_config_map_name" {
   value = kubernetes_config_map_v1.zookeeper_config_map.metadata.0.name
 }
 
 output "zookeeper_port" {
   value = tonumber(kubernetes_config_map_v1.zookeeper_config_map.data["ZOOKEEPER_CLIENT_PORT"])
+}
+
+output "broker_config_map_name" {
+  value = kubernetes_config_map_v1.broker_config_map.metadata.0.name
 }

@@ -172,3 +172,38 @@ variable "zookeeper_config_map_name" {
   type = string
   default = "zookeeper-config-map"
 }
+
+variable "broker_deployment_name" {
+  type = string
+  default = "broker"
+}
+
+variable "total_broker_replicas" {
+  type = number
+  default = 1
+}
+
+variable "broker_pods_name" {
+  type = string
+  default = "broker"
+}
+
+variable "broker_image" {
+  type = string
+  default = "confluentinc/cp-kafka:6.1.9"
+}
+
+variable "broker_container_name" {
+  type = string
+  default = "broker"
+}
+
+variable "broker_port" {
+  type = number
+  default = 29092
+}
+
+variable "broker_config_map_name" {
+  type = string
+  default = "broker-config-map"
+}
