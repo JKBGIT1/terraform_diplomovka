@@ -18,3 +18,7 @@ resource "kubernetes_service_v1" "broker_service" {
     type = "ClusterIP"
   }
 }
+
+output "broker_service_name" {
+  value = kubernetes_service_v1.broker_service.metadata.0.name
+}
