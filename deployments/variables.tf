@@ -13,7 +13,7 @@ variable "total_minio_replicas" {
   default = 1
 }
 
-variable "minio_pod_name" {
+variable "minio_pods_name" {
   type = string
   default = "minio"
 }
@@ -136,4 +136,39 @@ variable "postgres_pvc_name" {
 variable "postgres_secret_name" {
   type = string
   default = "postgres-secret"
+}
+
+variable "zookeeper_deployment_name" {
+  type = string
+  default = "zookeeper"
+}
+
+variable "total_zookeeper_replicas" {
+  type = number
+  default = 1
+}
+
+variable "zookeeper_pods_name" {
+  type = string
+  default = "zookeeper"
+}
+
+variable "zookeeper_image" {
+  type = string
+  default = "confluentinc/cp-zookeeper:7.2.1"
+}
+
+variable "zookeeper_container_name" {
+  type = string
+  default = "zookeeper"
+}
+
+variable "zookeeper_port" {
+  type = number
+  default = 2181
+}
+
+variable "zookeeper_config_map_name" {
+  type = string
+  default = "zookeeper-config-map"
 }

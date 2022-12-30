@@ -25,6 +25,16 @@ module "my_secrets" {
   ]
 }
 
+module "my_config_maps" {
+  source = "./config_maps"
+
+  diplomovka_namespace_name = module.my_namespaces.namespace_name
+
+  depends_on = [
+    module.my_namespaces
+  ]
+}
+
 module "my_persistent_volumes" {
   source = "./persistent_volumes"
   depends_on = [
@@ -61,9 +71,13 @@ module "my_deployments" {
   postgres_pvc_name = module.my_persistent_volume_claims.postgres_pvc_name
   postgres_secret_name = module.my_secrets.postgres_secret_name
 
+  zookeeper_config_map_name = module.my_config_maps.zookeeper_config_map_name
+  zookeeper_port = module.my_config_maps.zookeeper_port
+
   depends_on = [
     module.my_persistent_volume_claims,
-    module.my_secrets
+    module.my_secrets,
+    module.my_config_maps
   ]
 }
 

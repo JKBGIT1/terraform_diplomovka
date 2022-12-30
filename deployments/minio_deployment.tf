@@ -1,4 +1,3 @@
-
 resource "kubernetes_deployment_v1" "minio_deployment" {
   metadata {
     name = var.minio_deployment_name
@@ -14,7 +13,7 @@ resource "kubernetes_deployment_v1" "minio_deployment" {
     template {
       metadata {
         labels = {
-          app = var.minio_pod_name
+          app = var.minio_pods_name
         }
       }
       spec {
