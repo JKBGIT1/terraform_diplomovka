@@ -77,6 +77,9 @@ module "my_deployments" {
   broker_config_map_name = module.my_config_maps.broker_config_map_name
   broker_port = module.my_config_maps.broker_port
 
+  schema_registry_config_map_name = module.my_config_maps.schema_registry_config_map_name
+  schema_registry_port = module.my_config_maps.schema_registry_port
+
   depends_on = [
     module.my_persistent_volume_claims,
     module.my_secrets,
@@ -95,6 +98,9 @@ module "my_services" {
 
   broker_pods_name = module.my_deployments.broker_pods_name
   broker_port = module.my_config_maps.broker_port
+
+  schema_registry_pods_name = module.my_deployments.schema_registry_pods_name
+  schema_registry_port = module.my_config_maps.schema_registry_port
 
   depends_on = [
     module.my_deployments

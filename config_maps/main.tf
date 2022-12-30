@@ -25,6 +25,17 @@ resource "kubernetes_config_map_v1" "broker_config_map" {
   }
 }
 
+resource "kubernetes_config_map_v1" "schema_registry_config_map" {
+  metadata {
+    name = "schema-registry-config-map"
+    namespace = var.diplomovka_namespace_name
+  }
+  data = {
+    for line in compact(split("\r\n", trimspace(file("./config_maps/kafka_schema_registry.env")))):
+      split("=",line)[0] => split("=",line)[1]
+  }
+}
+
 output "zookeeper_config_map_name" {
   value = kubernetes_config_map_v1.zookeeper_config_map.metadata.0.name
 }
@@ -39,4 +50,12 @@ output "broker_config_map_name" {
 
 output "broker_port" {
   value = tonumber(kubernetes_config_map_v1.broker_config_map.data["BROKER_PORT"])
+}
+
+output "schema_registry_config_map_name" {
+  value = kubernetes_config_map_v1.schema_registry_config_map.metadata.0.name
+}
+
+output "schema_registry_port" {
+  value = tonumber(kubernetes_config_map_v1.schema_registry_config_map.data["PORT"])
 }

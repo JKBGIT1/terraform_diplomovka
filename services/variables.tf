@@ -57,3 +57,18 @@ variable "broker_port" {
   type = number
   default = 29092
 }
+
+variable "schema_registry_service_name" {
+  type = string
+  default = "registry"
+}
+
+variable "schema_registry_pods_name" {
+  type = string
+  default = "registry"
+}
+
+variable "schema_registry_port" {
+  type = number
+  default = 8081
+}

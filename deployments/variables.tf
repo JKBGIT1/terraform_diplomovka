@@ -207,3 +207,38 @@ variable "broker_config_map_name" {
   type = string
   default = "broker-config-map"
 }
+
+variable "schema_registry_deployment_name" {
+  type = string
+  default = "registry"
+}
+
+variable "total_schema_registry_replicas" {
+  type = number
+  default = 1
+}
+
+variable "schema_registry_pods_name" {
+  type = string
+  default = "registry"
+}
+
+variable "schema_registry_image" {
+  type = string
+  default = "confluentinc/cp-schema-registry:7.2.1"
+}
+
+variable "schema_registry_container_name" {
+  type = string
+  default = "registry"
+}
+
+variable "schema_registry_port" {
+  type = number
+  default = 8081
+}
+
+variable "schema_registry_config_map_name" {
+  type = string
+  default = "schema-registry-config-map"
+}
