@@ -36,3 +36,7 @@ output "zookeeper_port" {
 output "broker_config_map_name" {
   value = kubernetes_config_map_v1.broker_config_map.metadata.0.name
 }
+
+output "broker_port" {
+  value = tonumber(kubernetes_config_map_v1.broker_config_map.data["BROKER_PORT"])
+}

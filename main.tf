@@ -74,6 +74,9 @@ module "my_deployments" {
   zookeeper_config_map_name = module.my_config_maps.zookeeper_config_map_name
   zookeeper_port = module.my_config_maps.zookeeper_port
 
+  broker_config_map_name = module.my_config_maps.broker_config_map_name
+  broker_port = module.my_config_maps.broker_port
+
   depends_on = [
     module.my_persistent_volume_claims,
     module.my_secrets,
@@ -89,6 +92,9 @@ module "my_services" {
 
   zookeeper_pods_name = module.my_deployments.zookeeper_pods_name
   zookeeper_port = module.my_config_maps.zookeeper_port
+
+  broker_pods_name = module.my_deployments.broker_pods_name
+  broker_port = module.my_config_maps.broker_port
 
   depends_on = [
     module.my_deployments
