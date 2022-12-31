@@ -25,7 +25,7 @@ resource "kubernetes_secret_v1" "postgres_secret" {
   # TODO: create function for env parse or find out better way how to load env files to k8s secrets
   # source: https://github.com/hashicorp/terraform-provider-kubernetes/issues/889
   data = {
-    for line in compact(split("\n", file("./secrets/postgres_credentials.env"))):
+    for line in compact(split("\r\n", file("./secrets/postgres_credentials.env"))):
       split("=",line)[0] => split("=",line)[1]
   }
 }

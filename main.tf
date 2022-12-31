@@ -84,6 +84,8 @@ module "my_deployments" {
 
   files_producer_config_map_name = module.my_config_maps.files_producer_config_map_name
 
+  structured_data_consumer_config_map_name = module.my_config_maps.structured_data_consumer_config_map_name
+
   depends_on = [
     module.my_persistent_volume_claims,
     module.my_secrets,
@@ -109,6 +111,8 @@ module "my_services" {
   redis_pods_name = module.my_deployments.redis_pods_name
 
   files_producer_pods_name = module.my_deployments.files_producer_pods_name
+
+  postgres_pods_name = module.my_deployments.postgres_pods_name
 
   depends_on = [
     module.my_deployments

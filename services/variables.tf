@@ -102,3 +102,18 @@ variable "files_producer_port" {
   type = number
   default = 5000
 }
+
+variable "postgres_service_name" {
+  type = string
+  default = "postgres"
+}
+
+variable "postgres_pods_name" {
+  type = string
+  default = "postgres"
+}
+
+variable "postgres_port" {
+  type = number
+  default = 5432
+}

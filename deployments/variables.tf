@@ -307,3 +307,33 @@ variable "files_producer_config_map_name" {
   type = string
   default = "files-producer-config-map"
 }
+
+variable "structured_data_consumer_deployment_name" {
+  type = string
+  default = "structured-data-consumer"
+}
+
+variable "total_structured_data_consumer_replicas" {
+  type = number 
+  default = 1
+}
+
+variable "structured_data_consumer_pods_name" {
+  type = string
+  default = "structured-data-consumer"
+}
+
+variable "structured_data_consumer_image" {
+  type = string
+  default = "ykbhlvck/structured_data_consumer:latest"
+}
+
+variable "structured_data_consumer_container_name" {
+  type = string
+  default = "structured-data-consumer"
+}
+
+variable "structured_data_consumer_config_map_name" {
+  type = string
+  default = "structured-data-consumer-config-map"
+}
