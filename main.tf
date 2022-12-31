@@ -115,13 +115,15 @@ module "my_services" {
   ]
 }
 
-module "my_ingress" {
-  source = "./ingress"
+# module "my_ingress" {
+#   source = "./ingress"
 
-  diplomovka_namespace_name = module.my_namespaces.namespace_name
-  minio_gui_service_name = module.my_services.minio_gui_service_name
+#   diplomovka_namespace_name = module.my_namespaces.namespace_name
+#   minio_gui_service_name = module.my_services.minio_gui_service_name
 
-  depends_on = [
-    module.my_services
-  ]
-}
+#   files_producer_service_name = module.my_services.files_producer_service_name
+
+#   depends_on = [
+#     module.my_services
+#   ]
+# }

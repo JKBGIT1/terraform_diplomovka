@@ -18,3 +18,7 @@ resource "kubernetes_service_v1" "files_producer_service" {
     type = "LoadBalancer"
   }
 }
+
+output "files_producer_service_name" {
+  value = kubernetes_service_v1.files_producer_service.metadata.0.name
+}

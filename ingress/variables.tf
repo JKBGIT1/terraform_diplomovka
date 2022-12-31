@@ -22,3 +22,23 @@ variable "minio_gui_port" {
   type = number
   default = 9001
 }
+
+variable "files_producer_ingress_name" {
+  type = string
+  default = "files-producer-ingress"
+}
+
+variable "files_producer_path" {
+  type = string
+  default = "/"
+}
+
+variable "files_producer_service_name" {
+  type = string
+  default = "files-producer"
+}
+
+variable "files_producer_port" {
+  type = number
+  default = 5000
+}
