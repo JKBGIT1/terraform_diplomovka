@@ -337,3 +337,38 @@ variable "structured_data_consumer_config_map_name" {
   type = string
   default = "structured-data-consumer-config-map"
 }
+
+variable "structured_data_producer_deployment_name" {
+  type = string
+  default = "structured-data-producer"
+}
+
+variable "total_structured_data_producer_replicas" {
+  type = string
+  default = 1
+}
+
+variable "structured_data_producer_pods_name" {
+  type = string
+  default = "structured-data-producer"
+}
+
+variable "structured_data_producer_image" {
+  type = string
+  default = "ykbhlvck/structured_data_producer:latest"
+}
+
+variable "structured_data_producer_container_name" {
+  type = string
+  default = "structured-data-producer"
+}
+
+variable "structured_data_producer_port" {
+  type = number
+  default = 5000
+}
+
+variable "structured_data_producer_config_map_name" {
+  type = string
+  default = "structured-data-producer-config-map"
+}

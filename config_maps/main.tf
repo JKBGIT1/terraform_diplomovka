@@ -69,6 +69,17 @@ resource "kubernetes_config_map_v1" "structured_data_consumer_config_map" {
   }
 }
 
+resource "kubernetes_config_map_v1" "structured_data_producer_config_map" {
+  metadata {
+    name = "structured-data-producer-config-map"
+    namespace = var.diplomovka_namespace_name
+  }
+  data = {
+    for line in compact(split("\r\n", trimspace(file("./config_maps/structured_data_producer.env")))):
+      split("=",line)[0] => split("=",line)[1]
+  }
+}
+
 output "zookeeper_config_map_name" {
   value = kubernetes_config_map_v1.zookeeper_config_map.metadata.0.name
 }
@@ -103,4 +114,8 @@ output "files_producer_config_map_name" {
 
 output "structured_data_consumer_config_map_name" {
   value = kubernetes_config_map_v1.structured_data_consumer_config_map.metadata.0.name
+}
+
+output "structured_data_producer_config_map_name" {
+  value = kubernetes_config_map_v1.structured_data_producer_config_map.metadata.0.name
 }

@@ -117,3 +117,23 @@ variable "postgres_port" {
   type = number
   default = 5432
 }
+
+variable "structured_data_producer_service_name" {
+  type = string
+  default = "structured-data-producer"
+}
+
+variable "structured_data_producer_pods_name" {
+  type = string
+  default = "structured-data-producer"
+}
+
+variable "structured_data_producer_port" {
+  type = number
+  default = 5001
+}
+
+variable "structured_data_producer_target_port" {
+  type = number
+  default = 5000
+}
