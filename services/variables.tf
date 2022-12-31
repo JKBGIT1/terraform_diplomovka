@@ -72,3 +72,18 @@ variable "schema_registry_port" {
   type = number
   default = 8081
 }
+
+variable "redis_service_name" {
+  type = string
+  default = "redis"
+}
+
+variable "redis_pods_name" {
+  type = string
+  default = "redis"
+}
+
+variable "redis_port" {
+  type = number
+  default = 6379
+}
