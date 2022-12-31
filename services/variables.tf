@@ -87,3 +87,18 @@ variable "redis_port" {
   type = number
   default = 6379
 }
+
+variable "files_producer_service_name" {
+  type = string
+  default = "files-producer"
+}
+
+variable "files_producer_pods_name" {
+  type = string
+  default = "files-producer"
+}
+
+variable "files_producer_port" {
+  type = number
+  default = 5000
+}

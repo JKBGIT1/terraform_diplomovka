@@ -80,6 +80,10 @@ module "my_deployments" {
   schema_registry_config_map_name = module.my_config_maps.schema_registry_config_map_name
   schema_registry_port = module.my_config_maps.schema_registry_port
 
+  files_consumer_config_map_name = module.my_config_maps.files_consumer_config_map_name
+
+  files_producer_config_map_name = module.my_config_maps.files_producer_config_map_name
+
   depends_on = [
     module.my_persistent_volume_claims,
     module.my_secrets,
@@ -101,6 +105,10 @@ module "my_services" {
 
   schema_registry_pods_name = module.my_deployments.schema_registry_pods_name
   schema_registry_port = module.my_config_maps.schema_registry_port
+
+  redis_pods_name = module.my_deployments.redis_pods_name
+
+  files_producer_pods_name = module.my_deployments.files_producer_pods_name
 
   depends_on = [
     module.my_deployments

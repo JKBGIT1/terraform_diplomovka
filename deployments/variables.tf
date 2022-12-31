@@ -242,3 +242,68 @@ variable "schema_registry_config_map_name" {
   type = string
   default = "schema-registry-config-map"
 }
+
+variable "files_consumer_deployment_name" {
+  type = string
+  default = "files-consumer"
+}
+
+variable "total_files_consumer_replicas" {
+  type = number
+  default = 1
+}
+
+variable "files_consumer_pods_name" {
+  type = string
+  default = "files-consumer"
+}
+
+variable "files_consumer_image" {
+  type = string
+  default = "ykbhlvck/files_consumer:latest"
+}
+
+variable "files_consumer_container_name" {
+  type = string
+  default = "files-consumer"
+}
+
+variable "files_consumer_config_map_name" {
+  type = string
+  default = "files-consumer-config-map"
+}
+
+variable "files_producer_deployment_name" {
+  type = string
+  default = "files-producer"
+}
+
+variable "total_files_producer_replicas" {
+  type = number
+  default = 1
+}
+
+variable "files_producer_pods_name" {
+  type = string
+  default = "files-producer"
+}
+
+variable "files_producer_image" {
+  type = string
+  default = "ykbhlvck/files_producer:latest"
+}
+
+variable "files_producer_container_name" {
+  type = string
+  default = "files-producer"
+}
+
+variable "files_producer_port" {
+  type = number
+  default = 5000
+}
+
+variable "files_producer_config_map_name" {
+  type = string
+  default = "files-producer-config-map"
+}
