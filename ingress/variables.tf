@@ -30,7 +30,7 @@ variable "files_producer_ingress_name" {
 
 variable "files_producer_path" {
   type = string
-  default = "/"
+  default = "/files"
 }
 
 variable "files_producer_service_name" {
