@@ -25,6 +25,11 @@ resource "kubernetes_deployment_v1" "structured_data_consumer_deployment" {
               name = var.structured_data_consumer_config_map_name
             }
           }
+          env_from {
+            secret_ref {
+              name = var.postgres_secret_name
+            }
+          }
         }
       }
     }

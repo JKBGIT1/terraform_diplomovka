@@ -25,6 +25,11 @@ resource "kubernetes_deployment_v1" "files_consumer_deployment" {
               name = var.files_consumer_config_map_name
             }
           }
+          env_from {
+            secret_ref {
+                name = var.minio_secret_name
+            }
+          }
         }
       }
     }
