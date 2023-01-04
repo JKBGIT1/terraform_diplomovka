@@ -15,7 +15,7 @@ resource "kubernetes_service_v1" "structured_data_producer_service" {
       port = var.structured_data_producer_port
       target_port = var.structured_data_producer_target_port
     }
-    type = "LoadBalancer"
+    type = "ClusterIP"
   }
 }
 

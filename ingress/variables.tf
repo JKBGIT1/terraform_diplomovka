@@ -47,3 +47,23 @@ variable "files_producer_port" {
   type = number
   default = 5000
 }
+
+variable "structured_data_producer_ingress_name" {
+  type = string
+  default = "structured-data-producer-ingress"
+}
+
+variable "structured_data_producer_path" {
+  type = string
+  default = "/structured-data"
+}
+
+variable "structured_data_producer_service_name" {
+  type = string
+  default = "structured-data-producer"
+}
+
+variable "structured_data_producer_port" {
+  type = number
+  default = 5001
+}
