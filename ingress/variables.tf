@@ -13,6 +13,11 @@ variable "minio_ingress_name" {
   default = "minio-ingress"
 }
 
+variable "minio_gui_path" {
+  type = string
+  default = "/"
+}
+
 variable "minio_gui_service_name" {
   type = string
   default = "minio-gui"
@@ -30,7 +35,7 @@ variable "files_producer_ingress_name" {
 
 variable "files_producer_path" {
   type = string
-  default = "/files"
+  default = "/file"
 }
 
 variable "files_producer_service_name" {

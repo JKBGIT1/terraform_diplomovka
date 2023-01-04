@@ -15,7 +15,7 @@ resource "kubernetes_service_v1" "files_producer_service" {
       port = var.files_producer_port
       target_port = var.files_producer_port
     }
-    type = "LoadBalancer"
+    type = "ClusterIP"
   }
 }
 

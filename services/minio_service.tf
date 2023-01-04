@@ -36,7 +36,7 @@ resource "kubernetes_service_v1" "minio_service_gui" {
       port = var.minio_gui_port
       target_port = var.minio_gui_port
     }
-    type = "LoadBalancer"
+    type = "ClusterIP"
   }
 }
 
