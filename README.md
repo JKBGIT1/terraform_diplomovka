@@ -4,3 +4,4 @@ prerequisites:
 
 * minio console running on http://localhost:80
 * files producer running on http://localhost:80/file
+* structured data producer running on http://localhost:80/structured-data
