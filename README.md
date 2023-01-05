@@ -28,6 +28,8 @@ Before you start using the functionality of the data lake, I advise you to wait 
 The service for uploading files is exposed on http://localhost:80/file . If you want to upload the file to the running instace of the data lake, you have to invoke a POST request on http://localhost:80/file/upload . 
 The body of this request should contain the file, which you want to upload to the data lake. This file should be located under "file" parameter, as you can see on the image under.
 
+![Uploading file to the data lake with Postman](https://github.com/JKBGIT1/terraform_diplomovka/blob/main/imgs/upload_file.png)
+
 After successfull file upload, you can check on the url http://localhost:80/ , how the data lake processed the file. Because MINIO console is exposed on this url.
 
 If you want to upload structured data to the data lake, you have invoke a POST request on http://localhost:80/structured-data/upload .
