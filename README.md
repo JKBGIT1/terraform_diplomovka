@@ -5,7 +5,9 @@ The main goal of my Master's Thesis is to perform data deduplication in the data
 
 In the image below you can see the deployed kubernetes infrastructure of this solution.
 
-![Kubernetes infrastructure of this solution](https://github.com/JKBGIT1/terraform_diplomovka/blob/main/imgs/k8s_infrastructure.png)
+<div align="center">
+  <img src="https://github.com/JKBGIT1/terraform_diplomovka/blob/main/imgs/k8s_infrastructure.png">
+</div>
 
 ### Technologies
 * Data ingestion - Kafka
