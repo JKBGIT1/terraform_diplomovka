@@ -3,7 +3,9 @@
 ## Description
 The main goal of my Master's Thesis is to perform data deduplication in the data lake, specifically in the data ingestion phase. As a side project, I have developed this repository, which deploys the infrastructure of my Master's Thesis implementation to Kubernetes cluster with the usage of Terraform.
 
-![Kubernetes infrastructure of this solution](https://github.com/JKBGIT1/terraform_diplomovka/blob/main/imgs/upload_file.png)
+In the image below you can see the deployed kubernetes infrastructure of this solution.
+
+![Kubernetes infrastructure of this solution](https://github.com/JKBGIT1/terraform_diplomovka/blob/main/imgs/k8s_infrastructure.png)
 
 ### Technologies
 * Data ingestion - Kafka
