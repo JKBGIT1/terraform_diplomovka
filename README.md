@@ -35,6 +35,8 @@ After successfull file upload, you can check on the url http://localhost:80/ , h
 If you want to upload structured data to the data lake, you have invoke a POST request on http://localhost:80/structured-data/upload .
 The body of this request should contain sql dump file, which will be processed by the data lake. This sql dump should be located under "sql_dump" parameter. In the end the unique data from this file dump will be stored in PostgreSQL technology.
 
+![Uploading structured data to the data lake with Postman](https://github.com/JKBGIT1/terraform_diplomovka/blob/main/imgs/structured_data_upload.png)
+
 Currently you can't check, through some fancy GUI, if the data were uploaded successfully, because I haven't yet added PGAdmin to this infrastructure. Again you can you Postman for uploading the structured data (see the image below).
 
 ## Future plans
