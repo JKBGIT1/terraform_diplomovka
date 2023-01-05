@@ -14,7 +14,7 @@ The main goal of my Master's Thesis is to perform data deduplication in the data
 * Docker (I have used Docker Desktop v4.15.0)
 * Kubernetes (I have used Kubernetes extension v1.25.2 in Docker Desktop)
 * Terraform (I have used v1.3.6)
-* NGINX Ingress controller - kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/cloud/deploy.yaml
+* NGINX Ingress controller: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/cloud/deploy.yaml
 
 ### Steps to run:
 * git clone https://github.com/JKBGIT1/terraform_diplomovka.git
